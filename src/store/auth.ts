@@ -46,15 +46,9 @@ export const useAuth = create<AuthState>((set, get) => ({
         /* will re-create on first authed action */
       }
     } else {
-      // Browser/development preview (no Telegram, no stored token): the
-      // backend resolves the X-Dev-User development header, so the profile
-      // and protected pages render in plain-browser screenshots too.
-      try {
-        const me = await api.get<{ user: AppUser; orderCount: number; activeProjects: number }>('/me');
-        set({ user: me.user, isTelegram: false });
-      } catch {
-        /* unauthenticated browser visitor */
-      }
+      // Browser/development preview (no Telegram, no stored token):
+      // Must register/login first. No auto-login.
+      // The RequireAuth guard in App.tsx will redirect to /login.
     }
 
     set({ hydrated: true });
